@@ -1,0 +1,25 @@
+{
+   "action": {
+      "default_icon": "./icon/icon128.png",
+      "default_popup": "./popup/popup.html"
+   },
+   "background": {
+      "service_worker": "./background/background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "./content/content.js" ],
+      "matches": [ "https://*/*", "http://*/*" ]
+   } ],
+   "description": "Help for code review",
+   "icons": {
+      "128": "./icon/icon128.png",
+      "16": "./icon/icon16.png",
+      "48": "./icon/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0tvGjPIB5RtE4nmpQxQBeD4Xhb1g4MM1s4Ir0k/fI3WqVwi10voSzYFBgLGwyueBQImu5mPBjziQMWTorMQd83J/3BZMynRMfRqMaiPZcayQWu3TJx2PcvHjzHI2oOvrqAL8JAJSWhaWBiXsc59DQ4LFcN7jHEKS8JSHeebF2YB6Bc4rFfcOx+bsxnnY2QGrfdvZMmWbLn+xV+LephL5IXZSVGYWYWaS8zovnkYn/lv4tGin37HkXqzCvqElYEEE2t0jiBQqMivuXJohOLWs9W1vojR2a4WMMlaerYpU4vuit+uVlPJe/MMQe4h6fc6nUDaFZ963xy5O6RPDQhcjkwIDAQAB",
+   "manifest_version": 3,
+   "name": "CodeRevier",
+   "optional_host_permissions": [ "https://*/*", "http://*/*" ],
+   "permissions": [ "contextMenus", "tabs", "storage", "activeTab" ],
+   "version": "1.0"
+}
