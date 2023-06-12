@@ -20,6 +20,6 @@
    "manifest_version": 3,
    "name": "CodeRevier",
    "optional_host_permissions": [ "https://*/*", "http://*/*" ],
-   "permissions": [ "contextMenus", "tabs", "storage", "activeTab" ],
+   "permissions": [ "contextMenus", "tabs", "storage", "activeTab", "notifications"],
    "version": "1.0"
 }
