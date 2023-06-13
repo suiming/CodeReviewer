@@ -79,6 +79,8 @@ function updateText(info) {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === 'show_popup') {
     updateText(request.info);
+  } else if (request.action === 'show_alert') {
+    alert('正在解析中，请稍候...');
   }
 });
 

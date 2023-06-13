@@ -49,11 +49,7 @@ const reqSugesstion = (API_KEY, selectedText, prompt, isPop = false) => {
 
   //  展示选中文本
   const miniPrompt = prompt.substring(0, 10);
-  if (isPop) {
-    showLoadingPop('分析中，请稍候...');
-  } else {
-    showInnerView(`${miniPrompt}...\n分析中，请稍候...`, isPop);
-  }
+  showInnerView(`${miniPrompt}...\n分析中，请稍候...`, isPop);
 
   const reqObject = {
     model: "gpt-3.5-turbo",
@@ -80,7 +76,7 @@ const reqSugesstion = (API_KEY, selectedText, prompt, isPop = false) => {
     //  更新弹窗
     const display = `结果:\n${resultText}\n`;
     if (isPop) {
-      showPopResult(display);
+      showPopResult(display, selectedText);
     } else {
       showInnerView(display, isPop);
     }
@@ -90,7 +86,7 @@ const reqSugesstion = (API_KEY, selectedText, prompt, isPop = false) => {
     console.error(error);
     //  更新弹窗
     if (isPop) {
-      showPopResult(display);
+      showPopResult(display, selectedText);
     } else {
       showInnerView(error.message, isPop);
     }
@@ -101,7 +97,12 @@ const reqSugesstion = (API_KEY, selectedText, prompt, isPop = false) => {
 const showInnerView = (text2Show, isPop = false) => {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     if (tabs && tabs.length > 0) {
-      chrome.tabs.sendMessage(tabs[0].id, {action: "show_popup", info: {text: text2Show}});
+      if (!isPop) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "show_popup", info: {text: text2Show}});
+      } else {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "show_alert", info: {text: text2Show}});
+      }
+      
     }
   });
 }
@@ -129,8 +130,8 @@ const showLoadingPop = (text) => {
   });
 }
 
-const showPopResult = (text) => {
-  const htmlContent = getHmtlForText(text);
+const showPopResult = (text, selectedText = "") => {
+  const htmlContent = getHmtlForText(text, selectedText);
   // 将 HTML 页面设置为 WebviewPanel 的内容
   chrome.windows.create({
     type: 'popup',
@@ -140,10 +141,11 @@ const showPopResult = (text) => {
   });
 }
 
-const getHmtlForText = (text) => {
+const getHmtlForText = (text, selectedText) => {
   const mermaidCode = getMermaidCode(text);
   let description = text.replace(mermaidCode, '');
   
+  const showTitle = selectedText.substring(0, 10);
   // const displayStyle = description&& description.length > 0? '' : 'style="display:none';
   // 创建一个 WebviewPanel
   
@@ -152,7 +154,7 @@ const getHmtlForText = (text) => {
     <html>
       <head>
         <meta charset="UTF-8">
-        <title>文字代码可视化</title>
+        <title>文字代码可视化: ${showTitle}</title>
         <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
         <!-- 配置 Mermaid 库 -->
         <script>
